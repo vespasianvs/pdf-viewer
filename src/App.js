@@ -1,26 +1,31 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, {Component} from 'react';
 import './App.css';
+import {Document, Page} from "react-pdf";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends Component {
+  constructor(props) {
+      super(props);
+      this.state = {
+          numPages: null,
+          pageNumber: 1
+      };
+  }
+  onDocumentLoad({numPages}) {
+      this.setState({numPages});
+  }
+  render() {
+  const {pageNumber, numPages} = this.setState;
+      return (
+          <div>
+              <Document
+                  file={{url: 'https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf'}}
+                  onLoadSuccess={this.onDocumentLoad}>
+                  <Page pageNumber={pageNumber}/>
+              </Document>
+              <p>Page {pageNumber} of {numPages}</p>
+          </div>
+      );
+  }
 }
 
 export default App;
